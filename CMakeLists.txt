@@ -43,6 +43,9 @@ set(SRC_FILES
 ## in ``${SRC_FILES}``.
 add_library(${PROJECT_NAME} ${SRC_FILES})
 
+add_dependencies(${PROJECT_NAME} rosbag_generate_messages_cpp)
+
+
 ## Link the myviz executable with whatever Qt libraries have been defined by
 ## the ``find_package(Qt4 ...)`` line above, or by the
 ## ``set(QT_LIBRARIES Qt5::Widgets)``, and with whatever libraries
