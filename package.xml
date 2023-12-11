@@ -4,10 +4,11 @@
   <version>0.0.1</version>
   <description>RViz plugin to control rosbag play.</description>
 
-  <maintainer email="andreas.reich@unibw.de">anre</maintainer>
+  <maintainer email="andreas.reich@unibw.de">Andreas Reich</maintainer>
 
   <license>BSD</license>
-  <author email="andreas.reich@unibw.de">anre</author>
+  <author email="bianca.forkel@unibw.de">Bianca Forkel</author>
+  <author email="andreas.reich@unibw.de">Andreas Reich</author>
 
   <buildtool_depend>catkin</buildtool_depend>
 
