@@ -37,7 +37,7 @@ void QImageDialog::imageCallback(const T& msg)
     }
     catch (cv_bridge::Exception& e)
     {
-        std::cout << "Unable to convert image." << std::endl;
+        ROS_ERROR_STREAM("Unable to convert image: " << e.what());
     }
 
     QImage image(conversion_mat_.data,
