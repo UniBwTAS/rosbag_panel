@@ -34,6 +34,7 @@ set(SRC_FILES
     src/treemodel.cpp
     src/range_slider.cpp
     src/image_dialog.cpp
+    src/filtered_bag_generation.cpp
 )
 
 ## An rviz plugin is just a shared library, so here we declare the

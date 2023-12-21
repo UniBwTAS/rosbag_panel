@@ -11,6 +11,7 @@
 #include <rosbag/MessageQuery.h>
 #include <rosbag/QueryOptions.h>
 
+#include "filtered_bag_generation.h"
 #include "rosbag_panel.h"
 #include "std_srvs/SetBool.h"
 #include "treemodel.h"
@@ -42,8 +43,10 @@ RosbagPanel::RosbagPanel(QWidget* parent)
     expanded_widget_ = new QWidget();
     use_pause_topic_check_box_ = new QCheckBox("Use pause topics");
     use_pause_topic_check_box_->setChecked(false);
+    generate_filtered_bag_button_ = new QPushButton("Generate Bag");
     auto* expanded_layout_obj = new QBoxLayout(QBoxLayout::Direction::LeftToRight, expanded_widget_);
     expanded_layout_obj->addWidget(use_pause_topic_check_box_);
+    expanded_layout_obj->addWidget(generate_filtered_bag_button_);
     expanded_widget_->hide();
 
     auto* horizontal_line = new QFrame();
@@ -73,6 +76,7 @@ RosbagPanel::RosbagPanel(QWidget* parent)
     connect(range_slider_, SIGNAL(sliderReleased()), this, SLOT(rangeSliderReleased()));
     connect(speed_spin_box_, SIGNAL(valueChanged(double)), this, SLOT(setSpeed(double)));
     connect(use_pause_topic_check_box_, SIGNAL(stateChanged(int)), this, SLOT(checkIfUsePauseTopics()));
+    connect(generate_filtered_bag_button_, SIGNAL(clicked()), this, SLOT(generateFilteredBag()));
 
     bag_info_sub_ = nh_.subscribe("rosbag_play/bag_info", 1, &RosbagPanel::callbackBagInfo, this);
     clock_sub_ = nh_.subscribe("/clock", 1, &RosbagPanel::callbackClock, this);
@@ -858,6 +862,24 @@ void RosbagPanel::checkIfUsePauseTopics(bool send)
     }
     if (send)
         ros::service::call("/rosbag_play/play_options", play_options_srv_);
+}
+
+void RosbagPanel::generateFilteredBag()
+{
+    auto& r = play_options_srv_.request;
+
+    float bag_duration = static_cast<float>((end_time_ - start_time_).toSec());
+    std::cout << "BAG FOLDER: " << bag_folder_ << std::endl;
+    std::cout << "BAG START: " << r.start << std::endl;
+    std::cout << "BAG START: " << r.duration << std::endl;
+    std::cout << "TOPICS: " << std::endl;
+    for (const auto& topic : r.topics)
+        std::cout << "TOPIC: " << topic << std::endl;
+
+    std::string output_filename =
+        "/tmp/" +
+        QFileInfo(QString::fromStdString(last_bag_info_->bags.back())).baseName().toStdString() + "_filtered.bag";
+    FilteredBagGeneration::filter(last_bag_info_->bags, r.start, r.duration, r.topics, output_filename);
 }
 
 } // end namespace rosbag_panel

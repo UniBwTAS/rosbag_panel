@@ -72,6 +72,7 @@ class RosbagPanel : public rviz::Panel
     void checkServiceAvailability();
     void toggleExpandWidget();
     void checkIfUsePauseTopics(bool send = true);
+    void generateFilteredBag();
 
   protected:
     QPushButton* play_pause_button_;
@@ -85,6 +86,7 @@ class RosbagPanel : public rviz::Panel
 
     QWidget* expanded_widget_;
     QCheckBox* use_pause_topic_check_box_;
+    QPushButton* generate_filtered_bag_button_;
 
     ros::NodeHandle nh_;
 
