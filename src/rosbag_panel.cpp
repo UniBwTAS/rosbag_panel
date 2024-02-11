@@ -78,7 +78,7 @@ RosbagPanel::RosbagPanel(QWidget* parent)
     connect(use_pause_topic_check_box_, SIGNAL(stateChanged(int)), this, SLOT(checkIfUsePauseTopics()));
     connect(generate_filtered_bag_button_, SIGNAL(clicked()), this, SLOT(generateFilteredBag()));
 
-    bag_info_sub_ = nh_.subscribe("rosbag_play/bag_info", 1, &RosbagPanel::callbackBagInfo, this);
+    bag_info_sub_ = nh_.subscribe("/rosbag_play/bag_info", 1, &RosbagPanel::callbackBagInfo, this);
     clock_sub_ = nh_.subscribe("/clock", 1, &RosbagPanel::callbackClock, this);
 
     auto* timer = new QTimer(this);
@@ -94,7 +94,7 @@ RosbagPanel::RosbagPanel(QWidget* parent)
         status_label_->setText("Status: Warning, ROS Parameter '/use_sim_time' not set to 'true'.");
     }
 
-    query_options_pub_ = nh_.advertise<rosbag::MessageQuery>("rosbag_play/message_query", 1);
+    query_options_pub_ = nh_.advertise<rosbag::MessageQuery>("/rosbag_play/message_query", 1);
 }
 
 RosbagPanel::~RosbagPanel()
